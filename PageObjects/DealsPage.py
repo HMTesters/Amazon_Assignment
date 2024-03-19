@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from Utilities import data
 import time
+from Utilities.reusable_methods import is_element_visible,use_implicit_wait,is_all_elements_present
 
 class Deals_Page:
 
@@ -12,9 +13,11 @@ class Deals_Page:
     deal_of_the_day_link_xpath = '//*[@aria-label="Deal type filter"]//*[contains(text(),"Deal of the day")]'
     all_deal_of_the_day_cards_xpath = '//*[contains(@class,"DealCard-module__contentWithPadding")]//a//div'
     all_cards_value_xpath = "//*[contains(@class,'DealCard-module__contentWithPadding')]//a//div"
+    clear_text_xpath = "//li[contains(@class,'LinkFilterOption-module')]//a[contains(text(),'Clear')]"
 
     def __init__(self,driver):
         self.driver = driver
+        use_implicit_wait(self.driver,10)
 
     def sort_discount_filter_by_high_to_low(self):
         discount_filter_dropdown = self.driver.find_element(By.NAME,self.sort_by_dropdown_name)
@@ -24,19 +27,22 @@ class Deals_Page:
 
     def click_on_average_rating_4_and_up(self):
         average_rating_4_and_up_link = self.driver.find_element(By.CSS_SELECTOR,self.average_rating_above_4_css)
+        clear_text = By.XPATH,self.clear_text_xpath
         self.driver.execute_script("arguments[0].scrollIntoView();",average_rating_4_and_up_link)
         average_rating_4_and_up_link.click()
+        assert is_element_visible(self.driver,clear_text)
 
     def click_on_prime_deals_checkbox_and_verify_is_it_selected(self):
         self.driver.find_element(By.XPATH, self.prime_deals_checkbox_xpath).click()
-        time.sleep(5)
-        # print('checkbox :',self.driver.find_element(By.XPATH,self.prime_deals_checkbox_xpath).is_selected())
+        # assert self.driver.find_element(By.XPATH,self.prime_deals_checkbox_xpath).is_selected()
 
     def click_on_deal_of_the_day_deal_type(self):
         self.driver.find_element(By.XPATH, self.deal_of_the_day_link_xpath).click()
-        time.sleep(5)
+
 
     def capturing_the_cards_only_for_deal_of_the_day(self):
+        all_cards_elements = By.XPATH,self.all_cards_value_xpath
+        assert is_all_elements_present(self.driver,all_cards_elements)
         all_cards = self.driver.find_elements(By.XPATH, self.all_cards_value_xpath)
         all_cards_value_list = [value.text for value in all_cards]
         all_cards_filtered_values = []
