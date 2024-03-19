@@ -1,4 +1,5 @@
 import pytest
+from PageObjects.LoginPage import Login_Page
 from PageObjects.HomePage import Home_Page
 from PageObjects.DealsPage import Deals_Page
 from PageObjects.ProductPage import Product_Page
@@ -10,7 +11,16 @@ class Test_Amazon:
 
     def test_all_scenarios(self):
 
+        obj_LoginPage = Login_Page(self.driver)
         obj_HomePage = Home_Page(self.driver)
+
+        obj_LoginPage.click_on_signing_button()
+        obj_LoginPage.enter_email_address_text()
+        obj_LoginPage.click_on_continue_button()
+        obj_LoginPage.enter_password_text()
+        obj_LoginPage.click_on_signin_button_on_homepage()
+        obj_HomePage.Header_Footer()
+        obj_HomePage.card_details()
         obj_DealPage = Deals_Page(self.driver)
 
         obj_HomePage.click_on_todays_deal()
