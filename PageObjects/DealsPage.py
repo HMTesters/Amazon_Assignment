@@ -17,7 +17,7 @@ class Deals_Page:
 
     def __init__(self,driver):
         self.driver = driver
-        use_implicit_wait(self.driver,10)
+        self.driver.implicitly_wait(10)
 
     def sort_discount_filter_by_high_to_low(self):
         discount_filter_dropdown = self.driver.find_element(By.NAME,self.sort_by_dropdown_name)
@@ -33,6 +33,7 @@ class Deals_Page:
         assert is_element_visible(self.driver,clear_text)
 
     def click_on_prime_deals_checkbox_and_verify_is_it_selected(self):
+        assert self.driver.find_element(By.XPATH, self.prime_deals_checkbox_xpath).is_displayed()
         self.driver.find_element(By.XPATH, self.prime_deals_checkbox_xpath).click()
         # assert self.driver.find_element(By.XPATH,self.prime_deals_checkbox_xpath).is_selected()
 
@@ -43,6 +44,7 @@ class Deals_Page:
     def capturing_the_cards_only_for_deal_of_the_day(self):
         all_cards_elements = By.XPATH,self.all_cards_value_xpath
         assert is_all_elements_present(self.driver,all_cards_elements)
+        time.sleep(10)
         all_cards = self.driver.find_elements(By.XPATH, self.all_cards_value_xpath)
         all_cards_value_list = [value.text for value in all_cards]
         all_cards_filtered_values = []
