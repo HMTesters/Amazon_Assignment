@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from Utilities import data
 import time
-from Utilities.reusable_methods import is_element_visible,use_implicit_wait,is_all_elements_present
+from Utilities.reusable_methods import is_element_visible
 
 class Deals_Page:
 
@@ -14,22 +14,22 @@ class Deals_Page:
     all_deal_of_the_day_cards_xpath = '//*[contains(@class,"DealCard-module__contentWithPadding")]//a//div'
     all_cards_value_xpath = "//*[contains(@class,'DealCard-module__contentWithPadding')]//a//div"
     clear_text_xpath = "//li[contains(@class,'LinkFilterOption-module')]//a[contains(text(),'Clear')]"
-    selecting_mobile_and_accessories_xpath = "//span[@class='GridPresets-module__gridPresetsLargeItem_2xPgV2VoJCncjGPj18in1h GridPresets-module__selectedPreset_-JsFklJdPGF-wQYPAy4H2']"
-    percentage_xpath = "//*[contains(@class,'DealCard-module')]//div[@class='BadgeAutomated-module__badgeOneLineContainer_yYupgq1lKxb5h3bfDqA-B']//div"
-    selecting_card_xpath = "//a[contains(@class,'a-link-normal DealLink-module__dealLink_3v4tPYOP4qJj9bdiy0xAT a-color-base a-text-normal')]"
-
 
     def __init__(self,driver):
         self.driver = driver
         self.driver.implicitly_wait(10)
 
     def sort_discount_filter_by_high_to_low(self):
+        dropdown_element = By.NAME,self.sort_by_dropdown_name
+        assert is_element_visible(self.driver,dropdown_element)
         discount_filter_dropdown = self.driver.find_element(By.NAME,self.sort_by_dropdown_name)
         self.driver.execute_script("arguments[0].scrollIntoView();",discount_filter_dropdown )
         discount_options = Select(discount_filter_dropdown)
         discount_options.select_by_visible_text(self.discount_option)
 
     def click_on_average_rating_4_and_up(self):
+        average_rating_link = By.CSS_SELECTOR,self.average_rating_above_4_css
+        assert is_element_visible(self.driver,average_rating_link)
         average_rating_4_and_up_link = self.driver.find_element(By.CSS_SELECTOR,self.average_rating_above_4_css)
         clear_text = By.XPATH,self.clear_text_xpath
         self.driver.execute_script("arguments[0].scrollIntoView();",average_rating_4_and_up_link)
@@ -37,18 +37,18 @@ class Deals_Page:
         assert is_element_visible(self.driver,clear_text)
 
     def click_on_prime_deals_checkbox_and_verify_is_it_selected(self):
-        assert self.driver.find_element(By.XPATH, self.prime_deals_checkbox_xpath).is_displayed()
+        prime_deals_checkbox_element = By.XPATH, self.prime_deals_checkbox_xpath
+        assert is_element_visible(self.driver,prime_deals_checkbox_element)
         self.driver.find_element(By.XPATH, self.prime_deals_checkbox_xpath).click()
         # assert self.driver.find_element(By.XPATH,self.prime_deals_checkbox_xpath).is_selected()
 
     def click_on_deal_of_the_day_deal_type(self):
+        deal_of_the_day_link = By.XPATH, self.deal_of_the_day_link_xpath
+        assert is_element_visible(self.driver,deal_of_the_day_link)
         self.driver.find_element(By.XPATH, self.deal_of_the_day_link_xpath).click()
 
 
     def capturing_the_cards_only_for_deal_of_the_day(self):
-        all_cards_elements = By.XPATH,self.all_cards_value_xpath
-        assert is_all_elements_present(self.driver,all_cards_elements)
-        time.sleep(10)
         all_cards = self.driver.find_elements(By.XPATH, self.all_cards_value_xpath)
         all_cards_value_list = [value.text for value in all_cards]
         all_cards_filtered_values = []
@@ -61,26 +61,3 @@ class Deals_Page:
 
         for value in all_cards_filtered_values:
             print(value)
-
-    def click_on_mobile_and_accessories(self):
-
-        mobile_and_accessories_option = self.driver.find_element(By.XPATH,self.selecting_mobile_and_accessories_xpath)
-        self.driver.execute_script("arguments[0].scrollIntoView();", mobile_and_accessories_option)
-
-    def click_on_card_with_highest_discount_percentage(self):
-        discount_elements = self.driver.find_elements(By.XPATH,self.percentage_xpath)
-        discount_string = []
-        for element in discount_elements:
-            discount_percentage = element.text
-            if discount_percentage.startswith("Up"):
-                discount_string.append(discount_percentage)
-
-        discount_value = []
-
-        for each_element in discount_string:
-            discount_value.append(each_element.replace("%","").split(" ")[2])
-        print('dis v  :',len(discount_value))
-        print(max(discount_value))
-        discount_card_text = self.driver.find_elements(By.XPATH,self.selecting_card_xpath)
-        discount_card_text[discount_value.index(max(discount_value))].click()
-        time.sleep(5)
