@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from Utilities import data
 import time
-from Utilities.reusable_methods import is_element_visible,is_all_elements_present
+from Utilities.reusable_methods import is_element_visible,use_implicit_wait,is_all_elements_present
 
 class Deals_Page:
 

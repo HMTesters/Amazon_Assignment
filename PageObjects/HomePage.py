@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from Utilities.reusable_methods import is_element_visible
+from Utilities.reusable_methods import is_element_visible,use_implicit_wait
 
 class Home_Page:
 
