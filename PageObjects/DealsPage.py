@@ -14,6 +14,9 @@ class Deals_Page:
     all_deal_of_the_day_cards_xpath = '//*[contains(@class,"DealCard-module__contentWithPadding")]//a//div'
     all_cards_value_xpath = "//*[contains(@class,'DealCard-module__contentWithPadding')]//a//div"
     clear_text_xpath = "//li[contains(@class,'LinkFilterOption-module')]//a[contains(text(),'Clear')]"
+    selecting_mobile_and_accessories_xpath = "//span[@class='GridPresets-module__gridPresetsLargeItem_2xPgV2VoJCncjGPj18in1h GridPresets-module__selectedPreset_-JsFklJdPGF-wQYPAy4H2']"
+    percentage_xpath = "//*[contains(@class,'DealCard-module')]//div[@class='BadgeAutomated-module__badgeOneLineContainer_yYupgq1lKxb5h3bfDqA-B']//div"
+    selecting_card_xpath = "//a[contains(@class,'a-link-normal DealLink-module__dealLink_3v4tPYOP4qJj9bdiy0xAT a-color-base a-text-normal')]"
 
     def __init__(self,driver):
         self.driver = driver
@@ -61,3 +64,25 @@ class Deals_Page:
 
         for value in all_cards_filtered_values:
             print(value)
+
+    def click_on_mobile_and_accessories(self):
+        mobile_and_accessories_option = self.driver.find_element(By.XPATH,self.selecting_mobile_and_accessories_xpath)
+        self.driver.execute_script("arguments[0].scrollIntoView();", mobile_and_accessories_option)
+
+    def click_on_card_with_highest_discount_percentage(self):
+        discount_elements = self.driver.find_elements(By.XPATH,self.percentage_xpath)
+        discount_string = []
+        for element in discount_elements:
+            discount_percentage = element.text
+            if discount_percentage.startswith("Up"):
+                discount_string.append(discount_percentage)
+
+        discount_value = []
+
+        for each_element in discount_string:
+            discount_value.append(each_element.replace("%","").split(" ")[2])
+        print('dis v  :',len(discount_value))
+        print(max(discount_value))
+        discount_card_text = self.driver.find_elements(By.XPATH,self.selecting_card_xpath)
+        discount_card_text[discount_value.index(max(discount_value))].click()
+        time.sleep(5)
