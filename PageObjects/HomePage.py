@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from Utilities.reusable_methods import is_element_visible,use_implicit_wait
+from Utilities.reusable_methods import is_element_visible
 
 class Home_Page:
 
@@ -8,10 +8,12 @@ class Home_Page:
 
     def __init__(self,driver):
         self.driver = driver
-        use_implicit_wait(self.driver,10)
+        self.driver.implicitly_wait(10)
 
 
     def click_on_todays_deal(self):
+        todays_deal_button = By.XPATH,self.todays_deal_button_xpath
+        assert is_element_visible(self.driver,todays_deal_button)
         self.driver.find_element(By.XPATH,self.todays_deal_button_xpath).click()
         todays_deal_header = By.XPATH,self.todays_deal_header_xpath
         assert is_element_visible(self.driver,todays_deal_header)
