@@ -47,7 +47,6 @@ class ProductSelection_Page:
         time.sleep(4)
         for x in prices:
             self.prices_list.append(int(x.text))
-
         self.sort_items_text = self.driver.find_elements(By.XPATH, self.sort_items_text_xpath)
         self.sort_items_text[self.prices_list.index(min(self.prices_list))].click()
         time.sleep(5)

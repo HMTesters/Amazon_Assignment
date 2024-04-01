@@ -69,8 +69,6 @@ class Product_Page:
         discount_options.select_by_value(data.select_quantity)
         time.sleep(2)
         quantity=By.XPATH,self.select_quantity_xpath
-
-
         assert quantity==data.select_quantity
 
     def add_to_cart(self):
