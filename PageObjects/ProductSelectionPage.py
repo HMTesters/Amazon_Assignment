@@ -37,7 +37,6 @@ class ProductSelection_Page:
 
         all_products[review_list.index(max(review_list))].click()
 
-
     def sort_items_lowest_price(self):
         self.driver.find_element(By.XPATH, self.dropdown_button_xpath).click()
         time.sleep(5)

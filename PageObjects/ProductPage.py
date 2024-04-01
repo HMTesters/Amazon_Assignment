@@ -51,7 +51,6 @@ class Product_Page:
     def back_to_productSelection_page(self):
         self.driver.back()
 
-
     def check_eligibleFor_free_delivery_option(self):
         text = (self.driver.find_element(By.XPATH, self.free_delivery_xpath)).text
         if text == data.expected_free_delivery_text:
@@ -60,7 +59,6 @@ class Product_Page:
         # assert data.actual_free_delivery_text==data.expected_free_delivery_text
         free_delivery_text = By.XPATH, self.free_delivery_xpath
         assert is_element_visible(self.driver,free_delivery_text)
-
 
     def click_dropdown_and_select_quantity(self):
         dropdown = self.driver.find_element(By.XPATH, self.click_dropdown_xpath)
